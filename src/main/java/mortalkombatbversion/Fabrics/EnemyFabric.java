@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mortalkombatbversion;
+package mortalkombatbversion.Fabrics;
 
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
+import mortalkombatbversion.Characters.Character;
 
 /**
  *
@@ -13,7 +12,7 @@ import javax.swing.JProgressBar;
  */
 public class EnemyFabric {
 
-    public Player create(int i, int j) {
+    public Character create(int i, int j) {
         EnemyFabricInterface fabric = null;
 
         switch (i) {
@@ -33,7 +32,7 @@ public class EnemyFabric {
                 fabric = new ShaoKahnFabric();
                 break;
         }
-        Player enemy = fabric.create(j);
+        Character enemy = fabric.create(j);
         return enemy;
     }
 }

@@ -5,6 +5,11 @@
 package mortalkombatbversion;
 
 //ADD IMAGE!!!
+import mortalkombatbversion.Characters.Character;
+import mortalkombatbversion.Characters.Player;
+import mortalkombatbversion.Characters.ShaoKahn;
+import mortalkombatbversion.Fabrics.EnemyFabric;
+
 import java.util.ArrayList;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -27,7 +32,7 @@ public class Fight {
     int stun = 0;
     double v = 0.0;
 
-    public void Move(Player p1, Player p2, JLabel l, JLabel l2) {
+    public void Move(Character p1, Character p2, JLabel l, JLabel l2) {
         if (stun == 1) {
             p1.setAttack(-1);
         }
@@ -71,12 +76,12 @@ public class Fight {
         }
     }
 
-    public void Hit(Player human, Player enemy, int a, JLabel label,
-            JLabel label2, JDialog dialog, JLabel label3, CharacterAction action,
-            JProgressBar pr1, JProgressBar pr2, JDialog dialog1,
-            JDialog dialog2, JFrame frame, ArrayList<Result> results,
-            JLabel label4, JLabel label5, JLabel label6, JLabel label7,
-            JLabel label8, Items[] items, JRadioButton rb) {
+    public void Hit(Character human, Character enemy, int a, JLabel label,
+                    JLabel label2, JDialog dialog, JLabel label3, CharacterAction action,
+                    JProgressBar pr1, JProgressBar pr2, JDialog dialog1,
+                    JDialog dialog2, JFrame frame, ArrayList<Result> results,
+                    JLabel label4, JLabel label5, JLabel label6, JLabel label7,
+                    JLabel label8, Items[] items, JRadioButton rb) {
         label7.setText("");
         human.setAttack(a);
 
@@ -105,8 +110,8 @@ public class Fight {
             label7.setText("Вы воскресли");
         }
         if (human.getHealth() <= 0 | enemy.getHealth() <= 0) {
-            if (((Human) human).getWin() == 11) {
-                EndFinalRound(((Human) human), action, results, dialog1, dialog2,
+            if (((Player) human).getWin() == 11) {
+                EndFinalRound(((Player) human), action, results, dialog1, dialog2,
                         frame, label4, label5);
             } else {
                 EndRound(human, enemy, dialog, label3, action, items);
@@ -114,21 +119,21 @@ public class Fight {
         }
     }
 
-    public void EndRound(Player human, Player enemy, JDialog dialog, JLabel label,
-            CharacterAction action, Items[] items) {
+    public void EndRound(Character human, Character enemy, JDialog dialog, JLabel label,
+                         CharacterAction action, Items[] items) {
 
         dialog.setVisible(true);
         dialog.setBounds(300, 150, 700, 600);
         if (human.getHealth() > 0) {
             label.setText("You win");
-            ((Human) human).setWin();
+            ((Player) human).setWin();
 
             if (enemy instanceof ShaoKahn) {
                 action.AddItems(38, 23, 8, items);
-                action.AddPointsBoss(((Human) human), action.getEnemyes());
+                action.AddPointsBoss(((Player) human), action.getEnemyes());
             } else {
                 action.AddItems(25, 15, 5, items);
-                action.AddPoints(((Human) human), action.getEnemyes());
+                action.AddPoints(((Player) human), action.getEnemyes());
             }
         } else {
             label.setText(enemy.getName() + " win");
@@ -140,13 +145,13 @@ public class Fight {
 
     }
 
-    public void EndFinalRound(Human human, CharacterAction action,
-            ArrayList<Result> results, JDialog dialog1, JDialog dialog2, JFrame frame,
-            JLabel label1, JLabel label2) {
+    public void EndFinalRound(Player player, CharacterAction action,
+                              ArrayList<Result> results, JDialog dialog1, JDialog dialog2, JFrame frame,
+                              JLabel label1, JLabel label2) {
         String text = "Победа не на вашей стороне";
-        if (human.getHealth() > 0) {
-            human.setWin();
-            action.AddPoints(human, action.getEnemyes());
+        if (player.getHealth() > 0) {
+            player.setWin();
+            action.AddPoints(player, action.getEnemyes());
             text = "Победа на вашей стороне";
         }
         boolean top = false;
@@ -155,7 +160,7 @@ public class Fight {
         } else {
             int i = 0;
             for (int j = 0; j < results.size(); j++) {
-                if (human.getPoints() < results.get(j).getPoints()) {
+                if (player.getPoints() < results.get(j).getPoints()) {
                     i++;
                 }
             }
@@ -180,11 +185,11 @@ public class Fight {
         return a;
     }
 
-    public Player NewRound(Player human, JLabel label, JProgressBar pr1,
-            JProgressBar pr2, JLabel label2, JLabel text, JLabel label3, CharacterAction action) {
+    public Character NewRound(Character human, JLabel label, JProgressBar pr1,
+                              JProgressBar pr2, JLabel label2, JLabel text, JLabel label3, CharacterAction action) {
 
-        Player enemy1 = null;
-        if (((Human) human).getWin() == 6 | ((Human) human).getWin() == 11) {
+        Character enemy1 = null;
+        if (((Player) human).getWin() == 6 | ((Player) human).getWin() == 11) {
             enemy1 = action.ChooseBoss(label, label2, text, label3, human.getLevel());
         } else {
             enemy1 = action.ChooseEnemy(label, label2, text, label3);

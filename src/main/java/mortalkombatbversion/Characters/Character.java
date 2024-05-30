@@ -2,26 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mortalkombatbversion;
+package mortalkombatbversion.Characters;
 
 /**
  *
  * @author Мария
  */
-public class Player {
+public class Character {
     
     private int level;
     private int health;
-    private int maxhealth;
+    private int maxHealth;
     private int damage;
     private int attack;
     
-    public Player(int level, int health, int damage, int attack){
+    public Character(int level, int health, int damage, int attack){
         this.level=level;
         this.health=health;
         this.damage=damage;
         this.attack=attack;
-        this.maxhealth=health;
+        this.maxHealth =health;
     }
    
     public void setLevel(){
@@ -40,7 +40,7 @@ public class Player {
         this.attack=a;
     }
     public void setMaxHealth(int h){
-        this.maxhealth+=h;
+        this.maxHealth +=h;
     }
     
     public int getLevel(){
@@ -56,7 +56,7 @@ public class Player {
         return this.attack;
     }
     public int getMaxHealth(){
-        return this.maxhealth;
+        return this.maxHealth;
     }
     
     public String getName(){

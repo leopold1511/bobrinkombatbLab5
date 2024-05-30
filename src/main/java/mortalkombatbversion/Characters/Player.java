@@ -2,27 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mortalkombatbversion;
+package mortalkombatbversion.Characters;
 
 /**
  *
  * @author Мария
  */
-public class Human extends Player{
+public class Player extends Character {
     
 
     private int points;
     private int experience;
     private int win;
-    private int nextexperience;
+    private int nextExperience;
     
     
     
-    public Human(int level, int health, int  damage, int attack){
+    public Player(int level, int health, int  damage, int attack){
         super (level, health, damage, attack);
         this.points=0;
         this.experience=0;
-        this.nextexperience=40;
+        this.nextExperience =40;
         this.win=0;
     }
     
@@ -34,7 +34,7 @@ public class Human extends Player{
         return this.experience;
     }
     public int getNextExperience(){
-        return this.nextexperience;
+        return this.nextExperience;
     }
     public int getWin(){
         return this.win;
@@ -47,7 +47,7 @@ public class Human extends Player{
         this.experience+=e;
     }
     public void setNextExperience(int e){
-        this.nextexperience=e;
+        this.nextExperience =e;
     }
     public void setWin(){
         this.win++;
