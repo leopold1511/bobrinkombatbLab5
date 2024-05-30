@@ -30,7 +30,7 @@ public class Game {
     CharacterAction action = new CharacterAction();
     ChangeTexts change = new ChangeTexts();
     Fight fight = new Fight();
-    private ArrayList<Result> results = new ArrayList<>();
+    private final ArrayList<Result> results = new ArrayList<>();
 
     public Character NewEnemy(JLabel L1, JLabel L2,
                               JLabel L3, JLabel L4, JProgressBar pr2) {
@@ -80,11 +80,15 @@ public class Game {
     }
 
     public void ReadFromExcel() throws IOException{
-        XSSFWorkbook book = new XSSFWorkbook("Results.xlsx");
-        XSSFSheet sh = book.getSheetAt(0);
-        for (int i=1; i<=sh.getLastRowNum();i++) {
-            results.add(new Result(sh.getRow(i).getCell(1).getStringCellValue(),(int)sh.getRow(i).getCell(2).getNumericCellValue()));
-        }
+      try {
+          XSSFWorkbook book = new XSSFWorkbook("Results.xlsx");
+          XSSFSheet sh = book.getSheetAt(0);
+          for (int i = 1; i <= sh.getLastRowNum(); i++) {
+              results.add(new Result(sh.getRow(i).getCell(1).getStringCellValue(), (int) sh.getRow(i).getCell(2).getNumericCellValue()));
+          }
+      }catch (IOException e){
+          e.printStackTrace();
+      }
     }
     
     public void WriteToTable(JTable table){

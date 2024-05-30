@@ -24,8 +24,8 @@ import javax.swing.JRadioButton;
 public class Fight {
 
     ChangeTexts change = new ChangeTexts();
-    int kind_attack[] = {0};
-    int experiences[] = {40, 90, 180, 260, 410};
+    int[] kind_attack = {0};
+    int[] experiences = {40, 90, 180, 260, 410};
     EnemyFabric fabric = new EnemyFabric();
     int i = 1;
     int k = -1;
@@ -36,7 +36,7 @@ public class Fight {
         if (stun == 1) {
             p1.setAttack(-1);
         }
-        switch (Integer.toString(p1.getAttack()) + Integer.toString(p2.getAttack())) {
+        switch (Integer.toString(p1.getAttack()) + p2.getAttack()) {
             case "10":
                 v = Math.random();
                 if (p1 instanceof ShaoKahn & v < 0.15) {
@@ -159,8 +159,8 @@ public class Fight {
             top = true;
         } else {
             int i = 0;
-            for (int j = 0; j < results.size(); j++) {
-                if (player.getPoints() < results.get(j).getPoints()) {
+            for (Result result : results) {
+                if (player.getPoints() < result.getPoints()) {
                     i++;
                 }
             }
@@ -181,8 +181,7 @@ public class Fight {
     }
 
     public int[] ResetAttack() {
-        int a[] = {0};
-        return a;
+        return new int[]{0};
     }
 
     public Character NewRound(Character human, JLabel label, JProgressBar pr1,

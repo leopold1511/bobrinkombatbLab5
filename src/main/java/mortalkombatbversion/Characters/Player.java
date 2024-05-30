@@ -5,58 +5,61 @@
 package mortalkombatbversion.Characters;
 
 /**
- *
  * @author Мария
  */
 public class Player extends Character {
-    
+
 
     private int points;
     private int experience;
     private int win;
     private int nextExperience;
-    
-    
-    
-    public Player(int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
-        this.points=0;
-        this.experience=0;
-        this.nextExperience =40;
-        this.win=0;
-    }
-    
 
-    public int getPoints(){
-        return this.points;
-    }
-    public int getExperience(){
-        return this.experience;
-    }
-    public int getNextExperience(){
-        return this.nextExperience;
-    }
-    public int getWin(){
-        return this.win;
+    public Player(int level, int health, int damage, int attack) {
+        super(level, health, damage, attack);
+        this.points = 0;
+        this.experience = 0;
+        this.nextExperience = 40;
+        this.win = 0;
     }
 
-    public void setPoints(int p){
-        this.points+=p;
+
+    public int getPoints() {
+        return points;
     }
-    public void setExperience(int e){
-        this.experience+=e;
+
+    public int getExperience() {
+        return experience;
     }
-    public void setNextExperience(int e){
-        this.nextExperience =e;
+
+    public int getNextExperience() {
+        return nextExperience;
     }
-    public void setWin(){
-        this.win++;
+
+    public int getWin() {
+        return win;
     }
-    
+
+    public void setPoints(int points) {
+        this.points += points;
+    }
+
+    public void setExperience(int experience) {
+        this.experience += experience;
+    }
+
+    public void setNextExperience(int experience) {
+        this.nextExperience = experience;
+    }
+
+    public void setWin() {
+        win++;
+    }
+
     @Override
-    public String getName(){
+    public String getName() {
         return "You";
     }
 
-    
+
 }

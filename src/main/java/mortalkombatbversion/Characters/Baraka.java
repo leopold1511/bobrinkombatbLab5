@@ -11,7 +11,7 @@ package mortalkombatbversion.Characters;
 public class Baraka extends Character {
     
     public Baraka(int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
+        super(level, health, damage, attack);
     }
     
     @Override

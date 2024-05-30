@@ -11,7 +11,7 @@ package mortalkombatbversion.Characters;
 public class SonyaBlade extends Character {
     
     public SonyaBlade (int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
+        super(level, health, damage, attack);
     }
     
     @Override

@@ -7,9 +7,7 @@ package mortalkombatbversion;
 import mortalkombatbversion.Characters.Character;
 import mortalkombatbversion.Characters.Player;
 
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 /**
  *
