@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static mortalkombatbversion.Components.CharacterName.SHAO_KAHN;
 
-public class GameFight {
+public class Fight {
     Mediator mediator;
     Player player;
     GameCharacter enemy;

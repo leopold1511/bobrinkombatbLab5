@@ -7,7 +7,7 @@ import mortalkombatbversion.Actions.Action;
 
 import java.util.ArrayList;
 
-public class GameLogic {
+public class Logic {
 
     private final int[] experience_for_next_level = {40, 90, 180, 260, 410, 1000};
 

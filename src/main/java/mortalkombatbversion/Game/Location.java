@@ -2,12 +2,11 @@ package mortalkombatbversion.Game;
 
 import mortalkombatbversion.Components.GameCharacter;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class GameLocation {
-
-    public static final int MAX_ENEMIES = 4;
-    public static final int DEFAULT_ENEMY_INDEX = 4;
+public class Location {
 
     private int currentLocation = 1;
     private int currentEnemyNumber = 0;
@@ -32,6 +31,9 @@ public class GameLocation {
         }
     }
 
+    public static final int MAX_ENEMIES = 4;
+    public static final int DEFAULT_ENEMY_INDEX = 4;
+
     private GameCharacter getRandomEnemy() {
         int enemyIndex = (int) (Math.random() * MAX_ENEMIES);
         GameCharacter enemy = fullEnemiesList[enemyIndex];
@@ -40,7 +42,10 @@ public class GameLocation {
     }
 
     private void setEnemyPhoto(GameCharacter enemy) {
-        enemy.setPhoto(String.format("%s.jpg",enemy.getStringName()));
+        File f = new File(System.getProperty("java.class.path"));
+        File dir = f.getAbsoluteFile().getParentFile();
+        String path = dir.toString();
+        enemy.setPhoto(String.format("%s%s.jpg",path,"/"+enemy.getStringName()));
     }
 
     public void resetLocation(boolean isNextLocation, int maxEnemies) {

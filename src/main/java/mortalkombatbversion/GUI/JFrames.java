@@ -1,12 +1,15 @@
 package mortalkombatbversion.GUI;
 
-import mortalkombatbversion.Game.GameController;
+import mortalkombatbversion.Game.Helper;
 import mortalkombatbversion.Game.Mediator;
 import mortalkombatbversion.Components.Player;
 import mortalkombatbversion.Components.Items;
 import mortalkombatbversion.Components.GameCharacter;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +18,7 @@ import javax.swing.*;
 public class JFrames extends javax.swing.JFrame {
 
     Mediator mediator;
-    GameController gameController = new GameController();
+    Helper helper = new Helper();
     ArrayList<GameCharacter> enemiesList = null;
     Items[] items = new Items[3];
     String nameButton = "";
@@ -26,14 +29,17 @@ public class JFrames extends javax.swing.JFrame {
 
         initComponents();
         try {
-            gameController.readFromExcel();
+            helper.readFromExcel();
         } catch (IOException ignored) {
 
         }
-        gameController.writeToTable(recordsTable);
-        gameController.setEnemies();
-        gameController.gameFight.location.setFullEnemiesList(gameController.getEnemies());
-        playerIconLabel.setIcon(new ImageIcon("Kitana.jpg"));
+        helper.writeToTable(recordsTable);
+        helper.setEnemies();
+        helper.fight.location.setFullEnemiesList(helper.getEnemies());
+        File f = new File(System.getProperty("java.class.path"));
+        File dir = f.getAbsoluteFile().getParentFile();
+        String path = dir.toString();
+        playerIconLabel.setIcon(new ImageIcon(path +"/"+ "Kitana.jpg"));
         attributesGroup.add(healthButton);
         attributesGroup.add(damageButton);
         itemsGroup.add(firstItemButton);
@@ -44,7 +50,7 @@ public class JFrames extends javax.swing.JFrame {
         items[2] = new Items("Крест возрождения", 0);
         mediator = new Mediator();
         setMediatorComponents();
-        gameController.gameFight.setMediator(mediator);
+        helper.fight.setMediator(mediator);
     }
 
     public void setMediatorComponents() {
@@ -501,7 +507,11 @@ public class JFrames extends javax.swing.JFrame {
         nextRoundButton.setText("Дальше");
         nextRoundButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextRoundButtonActionPerformed(evt);
+                try {
+                    nextRoundButtonActionPerformed(evt);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -950,7 +960,11 @@ public class JFrames extends javax.swing.JFrame {
         startWithLocationsButton.setText("Начать игру");
         startWithLocationsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startWithLocationsButtonActionPerformed(evt);
+                try {
+                    startWithLocationsButtonActionPerformed(evt);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -1144,36 +1158,37 @@ public class JFrames extends javax.swing.JFrame {
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void attackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackButtonActionPerformed
-        gameController.gameFight.hit(1, gameController.getResults(), locationsNumber, gameController.getEnemies());
+        helper.fight.hit(1, helper.getResults(), locationsNumber, helper.getEnemies());
     }//GEN-LAST:event_attackButtonActionPerformed
 
     private void blockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blockButtonActionPerformed
-        gameController.gameFight.hit(0, gameController.getResults(), locationsNumber, gameController.getEnemies());
+        helper.fight.hit(0, helper.getResults(), locationsNumber, helper.getEnemies());
     }//GEN-LAST:event_blockButtonActionPerformed
 
-    private void nextRoundButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextRoundButtonActionPerformed
-        locationLabel.setText("Текущая локация: " + gameController.gameFight.location.getCurrentLocation() + "/" + locationsNumber);
-        if ((gameController.gameFight.location.getCurrentEnemyNumber() + 1) <= gameController.gameFight.location.getCurrentEnemies().size()) {
-            enemyNumberLabel.setText("Номер противника: " + (gameController.gameFight.location.getCurrentEnemyNumber() + 1) + "/" + gameController.gameFight.location.getCurrentEnemies().size());
+    private void nextRoundButtonActionPerformed(java.awt.event.ActionEvent evt) throws URISyntaxException {//GEN-FIRST:event_nextRoundButtonActionPerformed
+        locationLabel.setText("Текущая локация: " + helper.fight.location.getCurrentLocation() + "/" + locationsNumber);
+        if ((helper.fight.location.getCurrentEnemyNumber() + 1) <= helper.fight.location.getCurrentEnemies().size()) {
+            enemyNumberLabel.setText("Номер противника: " + (helper.fight.location.getCurrentEnemyNumber() + 1) + "/" + helper.fight.location.getCurrentEnemies().size());
         } else {
             enemyNumberLabel.setText("Финальный босс локации!");
         }
-        if (gameController.action.checkExperience(gameController.gameFight.getHuman())) {
-            gameController.action.levelUp(gameController.gameFight.getHuman(), gameController.getEnemies());
-            gameController.gameFight.location.setFullEnemiesList(gameController.getEnemies());
+        if (helper.action.checkExperience(helper.fight.getHuman())) {
+            setPanelEnabled(fightPanel,false);
+            helper.action.levelUp(helper.fight.getHuman(), helper.getEnemies());
+            helper.fight.location.setFullEnemiesList(helper.getEnemies());
             levelUp.setVisible(true);
             levelUp.setBounds(300, 200, 430, 350);
         }
-        gameController.gameFight.setEnemy(gameController.gameFight.location.getCurrentEnemy());
-        enemyIconLabel.setIcon(gameController.gameFight.getEnemy().getPhoto());
-        enemyDamageValueLabel.setText(Integer.toString(gameController.gameFight.getEnemy().getDamage()));
-        enemyHealthLabel.setText(Integer.toString(gameController.gameFight.getEnemy().getHealth()) + "/" + Integer.toString(gameController.gameFight.getEnemy().getMaxHealth()));
-        enemyHeroLabel.setText(gameController.gameFight.getEnemy().getStringName());
-        mediator.setHealthBar(gameController.gameFight.getEnemy());
-        enemyHealthBar.setMaximum(gameController.gameFight.getEnemy().getMaxHealth());
-        gameController.gameFight.newRound();
+        helper.fight.setEnemy(helper.fight.location.getCurrentEnemy());
+        enemyIconLabel.setIcon(helper.fight.getEnemy().getPhoto());
+        enemyDamageValueLabel.setText(Integer.toString(helper.fight.getEnemy().getDamage()));
+        enemyHealthLabel.setText(Integer.toString(helper.fight.getEnemy().getHealth()) + "/" + Integer.toString(helper.fight.getEnemy().getMaxHealth()));
+        enemyHeroLabel.setText(helper.fight.getEnemy().getStringName());
+        mediator.setHealthBar(helper.fight.getEnemy());
+        enemyHealthBar.setMaximum(helper.fight.getEnemy().getMaxHealth());
+        helper.fight.newRound();
 
-        mediator.setNewRoundTexts(gameController.gameFight.getHuman(), gameController.gameFight.getEnemy(), gameController.gameFight.getHuman().getItems());
+        mediator.setNewRoundTexts(helper.fight.getHuman(), helper.fight.getEnemy(), helper.fight.getHuman().getItems());
 
         endFightDialog.dispose();
     }//GEN-LAST:event_nextRoundButtonActionPerformed
@@ -1184,7 +1199,7 @@ public class JFrames extends javax.swing.JFrame {
 
     private void endGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endGameButtonActionPerformed
         try {
-            gameController.endGameTop(gameController.gameFight.getHuman(), enterNameField, recordsTable);
+            helper.endGameTop(helper.fight.getHuman(), enterNameField, recordsTable);
         } catch (IOException ex) {
             Logger.getLogger(JFrames.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1223,8 +1238,8 @@ public class JFrames extends javax.swing.JFrame {
         if (thirdItemButton.isSelected()) {
             nameButton = "Third item";
         }
-        Player player = gameController.gameFight.getHuman();
-        gameController.action.useItem(player, player.getItems(), nameButton, mediator);
+        Player player = helper.fight.getHuman();
+        helper.action.useItem(player, player.getItems(), nameButton, mediator);
         mediator.setHealthBar(player);
         playerHealthLabel.setText(player.getHealth() + "/" + player.getMaxHealth());
         mediator.setBagText(player.getItems());
@@ -1239,30 +1254,35 @@ public class JFrames extends javax.swing.JFrame {
         cantUseItemDialog.dispose();
     }//GEN-LAST:event_closeCantUseItemButtonActionPerformed
 
-    private void startWithLocationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startWithLocationsButtonActionPerformed
+    private void startWithLocationsButtonActionPerformed(java.awt.event.ActionEvent evt) throws URISyntaxException {//GEN-FIRST:event_startWithLocationsButtonActionPerformed
+        try {
+            locationsNumber = Integer.parseInt(setLocationsField.getText());
+        }catch (Exception e){
+            return;
+        }
+        if (locationsNumber<=0) return;
         setLocationsFrame.setVisible(false);
-        locationsNumber = Integer.parseInt(setLocationsField.getText());
-        locationLabel.setText("Текущая локация: " + gameController.gameFight.location.getCurrentLocation() + "/" + locationsNumber);
-        gameController.gameFight.setHuman(gameController.newHuman(mediator, items));
-        gameController.gameFight.location.setCurrentEnemies(gameController.gameFight.getHuman().getLevel());
+        locationLabel.setText("Текущая локация: " + helper.fight.location.getCurrentLocation() + "/" + locationsNumber);
+        helper.fight.setHuman(helper.newHuman(mediator, items));
+        helper.fight.location.setCurrentEnemies(helper.fight.getHuman().getLevel());
         fightFrame.setVisible(true);
         fightFrame.setSize(1000, 700);
-        if ((gameController.gameFight.location.getCurrentEnemyNumber() + 1) <= gameController.gameFight.location.getCurrentEnemies().size()) {
-            enemyNumberLabel.setText("Номер противника: " + (gameController.gameFight.location.getCurrentEnemyNumber() + 1) + "/" + gameController.gameFight.location.getCurrentEnemies().size());
+        if ((helper.fight.location.getCurrentEnemyNumber() + 1) <= helper.fight.location.getCurrentEnemies().size()) {
+            enemyNumberLabel.setText("Номер противника: " + (helper.fight.location.getCurrentEnemyNumber() + 1) + "/" + helper.fight.location.getCurrentEnemies().size());
         } else {
             enemyNumberLabel.setText("Финальный босс локации!");
         }
-        gameController.gameFight.setEnemy(gameController.gameFight.location.getCurrentEnemy());
-        enemyIconLabel.setIcon(gameController.gameFight.getEnemy().getPhoto());
-        enemyDamageValueLabel.setText(Integer.toString(gameController.gameFight.getEnemy().getDamage()));
-        enemyHealthLabel.setText(Integer.toString(gameController.gameFight.getEnemy().getHealth()) + "/" + Integer.toString(gameController.gameFight.getEnemy().getMaxHealth()));
-        enemyHeroLabel.setText(gameController.gameFight.getEnemy().getStringName());
-        mediator.setHealthBar(gameController.gameFight.getEnemy());
-        enemyHealthBar.setMaximum(gameController.gameFight.getEnemy().getMaxHealth());
+        helper.fight.setEnemy(helper.fight.location.getCurrentEnemy());
+        enemyIconLabel.setIcon(helper.fight.getEnemy().getPhoto());
+        enemyDamageValueLabel.setText(Integer.toString(helper.fight.getEnemy().getDamage()));
+        enemyHealthLabel.setText(Integer.toString(helper.fight.getEnemy().getHealth()) + "/" + Integer.toString(helper.fight.getEnemy().getMaxHealth()));
+        enemyHeroLabel.setText(helper.fight.getEnemy().getStringName());
+        mediator.setHealthBar(helper.fight.getEnemy());
+        enemyHealthBar.setMaximum(helper.fight.getEnemy().getMaxHealth());
 
-        gameController.gameFight.newRound();
+        helper.fight.newRound();
 
-        mediator.setNewRoundTexts(gameController.gameFight.getHuman(), gameController.gameFight.getEnemy(), gameController.gameFight.getHuman().getItems());
+        mediator.setNewRoundTexts(helper.fight.getHuman(), helper.fight.getEnemy(), helper.fight.getHuman().getItems());
 
         endFightDialog.dispose();
     }//GEN-LAST:event_startWithLocationsButtonActionPerformed
@@ -1277,16 +1297,28 @@ public class JFrames extends javax.swing.JFrame {
 
     private void chooseAttributeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseAttributeButtonActionPerformed
         if (healthButton.isSelected()) {
-            gameController.action.addHealthToPlayer(gameController.gameFight.getHuman());
+            helper.action.addHealthToPlayer(helper.fight.getHuman());
         } else {
-            gameController.action.addDamageToPlayer(gameController.gameFight.getHuman());
+            helper.action.addDamageToPlayer(helper.fight.getHuman());
         }
-        mediator.setNewRoundTexts(gameController.gameFight.getHuman(), gameController.gameFight.getEnemy(), gameController.gameFight.getHuman().getItems());
+        mediator.setNewRoundTexts(helper.fight.getHuman(), helper.fight.getEnemy(), helper.fight.getHuman().getItems());
         levelUp.dispose();
+        setPanelEnabled(fightPanel,true);
     }//GEN-LAST:event_chooseAttributeButtonActionPerformed
 
+    void setPanelEnabled(JPanel panel, Boolean isEnabled) {
+        panel.setEnabled(isEnabled);
+        Component[] components = panel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JPanel) {
+                setPanelEnabled((JPanel) component, isEnabled);
+            }
+            component.setEnabled(isEnabled);
+        }
+    }
+
     private void debuffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debuffButtonActionPerformed
-        gameController.gameFight.hit(2, gameController.getResults(), locationsNumber, gameController.getEnemies());
+        helper.fight.hit(2, helper.getResults(), locationsNumber, helper.getEnemies());
     }//GEN-LAST:event_debuffButtonActionPerformed
 
     /**

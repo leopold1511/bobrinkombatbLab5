@@ -19,10 +19,10 @@ import java.util.Comparator;
 
 import static mortalkombatbversion.Components.CharacterName.*;
 
-public class GameController {
+public class Helper {
 
-    public GameLogic action = new GameLogic();
-    public GameFight gameFight = new GameFight();
+    public Logic action = new Logic();
+    public Fight fight = new Fight();
     private final ArrayList<GameResults> gameResults = new ArrayList<>();
     private final GameCharacter[] enemies = new GameCharacter[5];
 
@@ -70,7 +70,10 @@ public class GameController {
                     r2.createCell(2).setCellValue(gameResults.get(i).getPoints());
                 }
             }
-            File f = new File("Results.xlsx");
+            File file = new File(System.getProperty("java.class.path"));
+            File dir = file.getAbsoluteFile().getParentFile();
+            String path = dir.toString();
+            File f = new File(path +"/"+ "Results.xlsx");
             book.write(new FileOutputStream(f));
         }
     }
