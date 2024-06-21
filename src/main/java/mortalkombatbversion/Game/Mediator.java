@@ -4,6 +4,7 @@ import mortalkombatbversion.Components.Player;
 import mortalkombatbversion.Components.Items;
 import mortalkombatbversion.Components.GameCharacter;
 import mortalkombatbversion.Actions.Action;
+import mortalkombatbversion.GUI.JFrames;
 
 import javax.swing.*;
 
@@ -39,6 +40,7 @@ public class Mediator {
     private JRadioButton firstItemButton;
     private JRadioButton secondItemButton;
     private JRadioButton thirdItemButton;
+    public JFrames gui;
 
     public void setActionLabels(GameCharacter enemy, GameCharacter human, Action enemyAction, Action playerAction) {
         updateLabel(playerActionLabel, human.getStringName(), "uses", playerAction.getType());
@@ -95,6 +97,7 @@ public class Mediator {
     }
 
     public void makeEndFightDialogVisible() {
+        gui.setPanelEnabled(gui.getFightPanel(),false);
         endFightDialog.setVisible(true);
         endFightDialog.setBounds(300, 150, 700, 600);
     }

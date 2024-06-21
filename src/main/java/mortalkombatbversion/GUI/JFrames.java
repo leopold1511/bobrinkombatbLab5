@@ -50,6 +50,7 @@ public class JFrames extends javax.swing.JFrame {
         items[2] = new Items("Крест возрождения", 0);
         mediator = new Mediator();
         setMediatorComponents();
+        mediator.gui = this;
         helper.fight.setMediator(mediator);
     }
 
@@ -78,6 +79,10 @@ public class JFrames extends javax.swing.JFrame {
         mediator.setSecondItemButton(this.secondItemButton);
         mediator.setThirdItemButton(this.thirdItemButton);
         mediator.setCantUseItemDialog(this.cantUseItemDialog);
+    }
+
+    public JPanel getFightPanel() {
+        return fightPanel;
     }
 
     @SuppressWarnings("unchecked")
@@ -509,9 +514,11 @@ public class JFrames extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     nextRoundButtonActionPerformed(evt);
+
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
+                setPanelEnabled(getFightPanel(),true);
             }
         });
 
@@ -1173,10 +1180,10 @@ public class JFrames extends javax.swing.JFrame {
             enemyNumberLabel.setText("Финальный босс локации!");
         }
         if (helper.action.checkExperience(helper.fight.getHuman())) {
-            setPanelEnabled(fightPanel,false);
             helper.action.levelUp(helper.fight.getHuman(), helper.getEnemies());
             helper.fight.location.setFullEnemiesList(helper.getEnemies());
             levelUp.setVisible(true);
+            this.setPanelEnabled(getFightPanel(),false);
             levelUp.setBounds(300, 200, 430, 350);
         }
         helper.fight.setEnemy(helper.fight.location.getCurrentEnemy());
@@ -1275,7 +1282,7 @@ public class JFrames extends javax.swing.JFrame {
         helper.fight.setEnemy(helper.fight.location.getCurrentEnemy());
         enemyIconLabel.setIcon(helper.fight.getEnemy().getPhoto());
         enemyDamageValueLabel.setText(Integer.toString(helper.fight.getEnemy().getDamage()));
-        enemyHealthLabel.setText(Integer.toString(helper.fight.getEnemy().getHealth()) + "/" + Integer.toString(helper.fight.getEnemy().getMaxHealth()));
+        enemyHealthLabel.setText(helper.fight.getEnemy().getHealth() + "/" + Integer.toString(helper.fight.getEnemy().getMaxHealth()));
         enemyHeroLabel.setText(helper.fight.getEnemy().getStringName());
         mediator.setHealthBar(helper.fight.getEnemy());
         enemyHealthBar.setMaximum(helper.fight.getEnemy().getMaxHealth());
@@ -1304,9 +1311,11 @@ public class JFrames extends javax.swing.JFrame {
         mediator.setNewRoundTexts(helper.fight.getHuman(), helper.fight.getEnemy(), helper.fight.getHuman().getItems());
         levelUp.dispose();
         setPanelEnabled(fightPanel,true);
+
     }//GEN-LAST:event_chooseAttributeButtonActionPerformed
 
-    void setPanelEnabled(JPanel panel, Boolean isEnabled) {
+    public void setPanelEnabled(JPanel panel, Boolean isEnabled) {
+        if(levelUp.isVisible()) return;
         panel.setEnabled(isEnabled);
         Component[] components = panel.getComponents();
         for (Component component : components) {

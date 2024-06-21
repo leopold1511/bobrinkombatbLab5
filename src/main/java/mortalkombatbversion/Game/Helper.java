@@ -83,7 +83,10 @@ public class Helper {
     }
 
     public void readFromExcel() throws IOException {
-        XSSFWorkbook book = new XSSFWorkbook("Results.xlsx");
+        File file = new File(System.getProperty("java.class.path"));
+        File dir = file.getAbsoluteFile().getParentFile();
+        String path = dir.toString();
+        XSSFWorkbook book = new XSSFWorkbook(path +"/"+ "Results.xlsx");
         XSSFSheet sh = book.getSheetAt(0);
         for (int i = 1; i <= sh.getLastRowNum(); i++) {
             gameResults.add(new GameResults(sh.getRow(i).getCell(1).getStringCellValue(), (int) sh.getRow(i).getCell(2).getNumericCellValue()));
